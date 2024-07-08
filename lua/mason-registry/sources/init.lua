@@ -48,6 +48,15 @@ local function parse(registry_id)
                 path = id,
             }
         end
+    elseif type == "http" or type == "https" then
+        return function()
+            local HttpRegistrySource = require "mason-registry.sources.http"
+            return HttpRegistrySource.new {
+                id = registry_id,
+                name = id,
+                url = ("%s://%s"):format(type, id),
+            }
+        end
     elseif type ~= nil then
         error(("Unknown registry type %q: %q."):format(type, registry_id), 0)
     end
